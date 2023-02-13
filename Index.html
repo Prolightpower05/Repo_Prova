@@ -1,7 +1,132 @@
 <html>
     <head>
+        <style>
+
+            div#background{
+		        background-image: url("background_green_hill.jpg");
+                background-repeat: no-repeat;
+                background-size:cover;
+                top:40px;
+                position: relative;
+                border: 10px solid lightblue;
+                width:1022px;
+                height: 498px;
+		        margin: auto;
+            }
+
+            div#sonic{
+                top:300px;
+		        left: 0px;
+                position: absolute;
+                background-image: url("sonic_spritesheet.png");
+                background-repeat: no-repeat;
+                background-position: -1px -1px;
+                width:77px;
+                height:81px;
+		        margin: auto;
+            }
+
+            .layoutButton{
+                position: absolute;
+                margin-top:410px;
+                margin-left:350px;
+                padding:15px;
+                font-size:30px;
+                color:white;
+                text-shadow: -2px 0 orange, 0 2px orange, 2px 0 orange, 0 -2px orange, 4px 2px 15px greenyellow;
+            }
+
+            #avanti{margin-left: 460px; position: absolute;}
+
+            #inverti{margin-left: 600px; position: absolute;}
+        </style>
     </head>
+
     <body>
-        <p>Ciao come stai!</p>
+        
+        <div id = "background">
+           <div id = "sonic"></div>
+           <input class = "layoutButton" id = "ferma" type = "button" value = "stop">
+           <input class = "layoutButton" id = "avanti" type = button value = "avanti" disabled>
+           <input class = "layoutButton" id = "inverti" type = "button" value = "indietro" disabled>
+        </div>
+        <br>
+        
+        
+        <script>
+            var contenitore = document.getElementById("sonic");
+           
+            let sonic = ["-1px -82px", "-77px -82px", "-156px -82px", "-234px -82px", "-312px -82px", "-389px -82px", "-467px -82px", "-545px -82px", "-1px -165px", "-77px -165px", "-156px -165px", "-234px -165px",//Sonic che va avanti
+                        "-640px -341px", "-556px -341px", "-470px -341px", "-390px -341px", "-312px -341px", "-241px -341px", "-159px -341px", "-80px -341px", "-630px -430px", "-540px -430px", "-465px -430px", "-390px -430px" //Sonic che va indietro
+                        ]; 
+            
+            var timer = setInterval(muovi, 70);
+            var fermo = document.getElementById("ferma");
+            var riprendi = document.getElementById("avanti");
+            var inverti = document.getElementById("inverti");
+            fermo.onclick = stop;
+            riprendi.onclick = riprendiSonic;
+            inverti.onclick = invertiDirezione;
+            var i = 1;
+            var sonicX = 0;
+
+            function muovi(){
+                contenitore.style.backgroundPosition = sonic[i];
+                i++;
+                if(i == 12)
+                    i = 0;
+                sonicX += 30;
+                if(sonicX > 1022 - 77)
+                    sonicX = 0;
+                contenitore.style.left = sonicX + "px";
+            }
+
+            function muoviInverso(){
+                contenitore.style.backgroundPosition = sonic[i];
+                i++;
+                if(i == 24)
+                    i = 12;
+                sonicX -= 30;
+                if(sonicX < 0)
+                    sonicX = 1022 - 77;
+                contenitore.style.left = sonicX + "px";
+            }
+
+            function changeButton(){
+                fermo.disabled = true;
+                riprendi.disabled = false;
+                inverti.disabled = false;
+            }
+
+            function changeButtonOnStart(){
+                fermo.disabled = false;
+                inverti.disabled = true;
+                riprendi.disabled = true;
+            }
+
+            function stop(){
+                clearInterval(timer);
+                changeButton();
+                if(i >= 1 && i <= 11)
+                    contenitore.style.backgroundPosition = sonic[0];
+                else
+                    contenitore.style.backgroundPosition = sonic[12];
+            }
+            
+            function riprendiSonic(){
+                clearInterval(timer);
+                changeButtonOnStart();
+                i = 0;
+                timer = setInterval(muovi, 70);
+            }
+
+            function invertiDirezione(){
+                clearInterval(timer);
+                changeButtonOnStart();
+                i = 12;
+                timer = setInterval(muoviInverso, 70);
+            }
+            
+        </script>
     </body>
 </html>
